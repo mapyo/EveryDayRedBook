@@ -1,20 +1,30 @@
 package com.mapyo.everydayredbook.app;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity implements OnClickListener{
-    static List<Book> dataList = new ArrayList<Book>();
+    static List<RedDataRow> dataList = new ArrayList<RedDataRow>();
 
     ListView listView;
     Button addButton;
+
+    static RedDataRowAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +32,7 @@ public class MainActivity extends Activity implements OnClickListener{
         setContentView(R.layout.activity_main);
         findViews();
         setListners();
+        setAdapters();
     }
 
     protected void findViews() {
@@ -42,10 +53,18 @@ public class MainActivity extends Activity implements OnClickListener{
         }
     }
 
+    protected void setAdapters(){
+        adapter = new RedDataRowAdapter();
+        listView.setAdapter(adapter);
+    }
+
     protected void addItem() {
         dataList.add(
-                new Book()
-        );
+                new RedDataRow(
+                        "絶滅（EX）", "哺乳類",
+                        "オキナワオオコウモリ", "Pteropus loochoensis"
+                        ));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -68,4 +87,59 @@ public class MainActivity extends Activity implements OnClickListener{
         return super.onOptionsItemSelected(item);
     }
 
+    private class RedDataRowAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return dataList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return dataList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView (
+            int posision,
+            View convertView,
+            ViewGroup parent
+        ) {
+
+            TextView category;
+            TextView taxon;
+            TextView japaneseName;
+            TextView scientificName;
+
+            View v = convertView;
+
+            if(v == null) {
+                LayoutInflater inflater =
+                        (LayoutInflater)
+                          getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = inflater.inflate(R.layout.row, null);
+            }
+            RedDataRow row = (RedDataRow)getItem(posision);
+
+            if(row != null) {
+                category = (TextView) v.findViewById(R.id.row_category);
+                taxon = (TextView) v.findViewById(R.id.row_taxon);
+                japaneseName = (TextView) v.findViewById(R.id.row_japanese_name);
+                scientificName = (TextView) v.findViewById(R.id.row_scientific_name);
+
+                category.setText(row.getCategory());
+                taxon.setText(row.getTaxon());
+                japaneseName.setText(row.getJapaneseName());
+                scientificName.setText(row.getScientificName());
+            }
+
+            return v;
+        }
+
+    }
 }
