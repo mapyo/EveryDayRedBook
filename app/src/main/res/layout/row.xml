@@ -17,24 +17,24 @@
             android:id="@+id/row_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="絶滅（EX）" />
+            />
 
         <TextView
             android:id="@+id/row_taxon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="哺乳類" />
+            />
     </LinearLayout>
 
     <TextView
         android:id="@+id/row_japanese_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="オキナワオオコウモリ" />
+        />
 
     <TextView
         android:id="@+id/row_scientific_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pteropus loochoensis" />
+        />
 </LinearLayout>

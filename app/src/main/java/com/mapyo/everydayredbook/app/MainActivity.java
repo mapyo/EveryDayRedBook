@@ -106,7 +106,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
         @Override
         public View getView (
-            int posision,
+            int position,
             View convertView,
             ViewGroup parent
         ) {
@@ -124,7 +124,7 @@ public class MainActivity extends Activity implements OnClickListener{
                           getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = inflater.inflate(R.layout.row, null);
             }
-            RedDataRow row = (RedDataRow)getItem(posision);
+            RedDataRow row = (RedDataRow)getItem(position);
 
             if(row != null) {
                 category = (TextView) v.findViewById(R.id.row_category);
