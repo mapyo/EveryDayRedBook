@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
-        setListners();
+        setListeners();
         setAdapters();
     }
 
@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements OnClickListener{
        addButton = (Button)findViewById(R.id.button);
     }
 
-    protected void setListners() {
+    protected void setListeners() {
        addButton.setOnClickListener(this);
     }
 
