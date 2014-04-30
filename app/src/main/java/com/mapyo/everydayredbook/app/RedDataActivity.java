@@ -5,19 +5,48 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 
 public class RedDataActivity extends Activity {
+
+    RedDataRow redDataRow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_red_data);
 
+        setRedDataRow();
+        setLayout();
+
+    }
+
+    // 画面に変数をセット
+    protected void setLayout() {
+        TextView category = (TextView)findViewById(R.id.row_category);
+        TextView taxon = (TextView)findViewById(R.id.row_taxon);
+        TextView japaneseName = (TextView)findViewById(R.id.row_japanese_name);
+        TextView scientificName = (TextView)findViewById(R.id.row_scientific_name);
+
+        category.setText(redDataRow.getCategory());
+        taxon.setText(redDataRow.getTaxon());
+        japaneseName.setText(redDataRow.getJapaneseName());
+        scientificName.setText(redDataRow.getScientificName());
+    }
+
+    private void setRedDataRow() {
         Intent intent = getIntent();
         String category = intent.getStringExtra("CATEGORY");
-        Toast.makeText(getApplicationContext(), category, Toast.LENGTH_SHORT).show();
+        String taxon = intent.getStringExtra("TAXON");
+        String japaneseName = intent.getStringExtra("JAPANESE_NAME");
+        String scientificName = intent.getStringExtra("SCIENTIFIC_NAME");
+
+        redDataRow = new RedDataRow(
+                category, taxon, japaneseName, scientificName);
     }
 
 

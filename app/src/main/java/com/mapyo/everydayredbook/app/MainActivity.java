@@ -29,6 +29,7 @@ public class MainActivity extends Activity
 
     ListView listView;
     Button addButton;
+    int num;
 
     static RedDataRowAdapter adapter;
 
@@ -56,9 +57,6 @@ public class MainActivity extends Activity
             @Override
             public void onItemClick(AdapterView<?> parent,View view,
                                     int position, long id) {
-                // Toast.makeText(getApplicationContext(), "テスト position: " + position + "id: " + id, Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(), "新しい画面を開きます", Toast.LENGTH_SHORT).show();
-
                 // 新しい画面へ遷移する
                 // インテントのインスタンス作成
                 Intent intent = new Intent(MainActivity.this, RedDataActivity.class);
@@ -69,11 +67,11 @@ public class MainActivity extends Activity
                 TextView japaneseName = (TextView) view.findViewById(R.id.row_japanese_name);
                 TextView scientificName = (TextView) view.findViewById(R.id.row_scientific_name);
 
-                category.getText();
-
                 intent.putExtra("CATEGORY", category.getText());
+                intent.putExtra("TAXON", taxon.getText());
+                intent.putExtra("JAPANESE_NAME", japaneseName.getText());
+                intent.putExtra("SCIENTIFIC_NAME", scientificName.getText());
 
-                //Toast.makeText(getApplicationContext(), category.getText(), Toast.LENGTH_SHORT).show();
                 // 次画面のアクティビティ起動
                 startActivity(intent);
             }
@@ -100,7 +98,7 @@ public class MainActivity extends Activity
         dataList.add(
                 new RedDataRow(
                         "絶滅（EX）", "哺乳類",
-                        "オキナワオオコウモリ", "Pteropus loochoensis"
+                        "オキナワオオコウモリ " + num++, "Pteropus loochoensis"
                         ));
         adapter.notifyDataSetChanged();
     }
