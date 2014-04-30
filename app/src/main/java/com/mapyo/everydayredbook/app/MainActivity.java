@@ -57,10 +57,23 @@ public class MainActivity extends Activity
             public void onItemClick(AdapterView<?> parent,View view,
                                     int position, long id) {
                 // Toast.makeText(getApplicationContext(), "テスト position: " + position + "id: " + id, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "新しい画面を開きます", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "新しい画面を開きます", Toast.LENGTH_SHORT).show();
+
                 // 新しい画面へ遷移する
                 // インテントのインスタンス作成
                 Intent intent = new Intent(MainActivity.this, RedDataActivity.class);
+
+                // タップしたviewのtextの取得
+                TextView category = (TextView) view.findViewById(R.id.row_category);
+                TextView taxon = (TextView) view.findViewById(R.id.row_taxon);
+                TextView japaneseName = (TextView) view.findViewById(R.id.row_japanese_name);
+                TextView scientificName = (TextView) view.findViewById(R.id.row_scientific_name);
+
+                category.getText();
+
+                intent.putExtra("CATEGORY", category.getText());
+
+                //Toast.makeText(getApplicationContext(), category.getText(), Toast.LENGTH_SHORT).show();
                 // 次画面のアクティビティ起動
                 startActivity(intent);
             }

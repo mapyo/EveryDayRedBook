@@ -1,9 +1,11 @@
 package com.mapyo.everydayredbook.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class RedDataActivity extends Activity {
@@ -12,6 +14,10 @@ public class RedDataActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_red_data);
+
+        Intent intent = getIntent();
+        String category = intent.getStringExtra("CATEGORY");
+        Toast.makeText(getApplicationContext(), category, Toast.LENGTH_SHORT).show();
     }
 
 
