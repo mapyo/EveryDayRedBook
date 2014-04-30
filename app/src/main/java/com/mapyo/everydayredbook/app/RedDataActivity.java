@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 
 public class RedDataActivity extends Activity {
 
-    RedDataRow redDataRow;
+    RedData redData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +29,10 @@ public class RedDataActivity extends Activity {
         TextView japaneseName = (TextView)findViewById(R.id.row_japanese_name);
         TextView scientificName = (TextView)findViewById(R.id.row_scientific_name);
 
-        category.setText(redDataRow.getCategory());
-        taxon.setText(redDataRow.getTaxon());
-        japaneseName.setText(redDataRow.getJapaneseName());
-        scientificName.setText(redDataRow.getScientificName());
+        category.setText(redData.getCategory());
+        taxon.setText(redData.getTaxon());
+        japaneseName.setText(redData.getJapaneseName());
+        scientificName.setText(redData.getScientificName());
     }
 
     private void setRedDataRow() {
@@ -45,7 +42,7 @@ public class RedDataActivity extends Activity {
         String japaneseName = intent.getStringExtra("JAPANESE_NAME");
         String scientificName = intent.getStringExtra("SCIENTIFIC_NAME");
 
-        redDataRow = new RedDataRow(
+        redData = new RedData(
                 category, taxon, japaneseName, scientificName);
     }
 

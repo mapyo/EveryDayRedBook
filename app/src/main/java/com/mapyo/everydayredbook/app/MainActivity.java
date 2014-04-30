@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 public class MainActivity extends Activity
         implements OnClickListener {
 
-    static List<RedDataRow> dataList = new ArrayList<RedDataRow>();
+    static List<RedData> dataList = new ArrayList<RedData>();
 
     ListView listView;
     Button addButton;
@@ -96,7 +95,7 @@ public class MainActivity extends Activity
 
     protected void addItem() {
         dataList.add(
-                new RedDataRow(
+                new RedData(
                         "絶滅（EX）", "哺乳類",
                         "オキナワオオコウモリ " + num++, "Pteropus loochoensis"
                         ));
@@ -160,7 +159,7 @@ public class MainActivity extends Activity
                           getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = inflater.inflate(R.layout.row, null);
             }
-            RedDataRow row = (RedDataRow)getItem(position);
+            RedData row = (RedData)getItem(position);
 
             if(row != null) {
                 category = (TextView) v.findViewById(R.id.row_category);

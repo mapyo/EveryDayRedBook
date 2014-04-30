@@ -1,12 +1,12 @@
 package com.mapyo.everydayredbook.app;
 
-public class RedDataRow {
+public class RedData {
     private String category;
     private String taxon;
     private String japaneseName;
     private String scientificName;
 
-    public RedDataRow(
+    public RedData(
             String category,
             String taxon,
             String japaneseName,
