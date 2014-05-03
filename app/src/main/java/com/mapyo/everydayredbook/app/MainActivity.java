@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -124,27 +125,23 @@ public class MainActivity extends Activity
     }
 
     protected void addItem() {
-        String category = "hoge";
-        String taxon = "hoge";
-        String japanese_name = "hoge";
-        String scientific_name = "hoge";
         Cursor c = findData(num);
         num++;
         if(c.moveToFirst()) {
-            category = c.getString(c.getColumnIndex("category"));
-            taxon = c.getString(c.getColumnIndex("taxon"));
-            japanese_name = c.getString(c.getColumnIndex("japanese_name"));
-            scientific_name = c.getString(c.getColumnIndex("scientific_name"));
-        }
+            String category = c.getString(c.getColumnIndex("category"));
+            String taxon = c.getString(c.getColumnIndex("taxon"));
+            String japanese_name = c.getString(c.getColumnIndex("japanese_name"));
+            String scientific_name = c.getString(c.getColumnIndex("scientific_name"));
 
-        dataList.add(
-                new RedData(
-//                        "絶滅（EX）", "哺乳類",
-                        category, taxon,
-                        //"オキナワオオコウモリ " + num++, "Pteropus loochoensis"
-                        japanese_name, scientific_name
-                        ));
-        adapter.notifyDataSetChanged();
+            dataList.add(
+                    new RedData(
+                            category, taxon,
+                            japanese_name, scientific_name
+                    ));
+            adapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "表示できるデータがありませんでした", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
