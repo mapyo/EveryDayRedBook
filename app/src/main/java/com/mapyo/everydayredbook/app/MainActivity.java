@@ -3,6 +3,9 @@ package com.mapyo.everydayredbook.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +20,7 @@ import android.widget.ListView;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,17 +32,43 @@ public class MainActivity extends Activity
 
     ListView listView;
     Button addButton;
-    int num;
+    int num=1;
 
     static RedDataRowAdapter adapter;
+
+    // db関連
+    private DataBaseHelper mDbHelper;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setDatabase();
+
         setContentView(R.layout.activity_main);
         findViews();
         setListeners();
         setAdapters();
+    }
+
+    private void setDatabase() {
+        mDbHelper = new DataBaseHelper(this);
+        try {
+            mDbHelper.createEmptyDatabase();
+            db = mDbHelper.openDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        } catch (SQLiteException sqle) {
+            throw sqle;
+        }
+    }
+
+    private static final String [] COLUMNS = {"id", "category", "taxon", "japanese_name", "scientific_name"};
+
+    private Cursor findData(int id) {
+        Cursor cursor = db.query("red_data", COLUMNS, "id=" + id, null, null, null, null);
+        return cursor;
     }
 
     protected void findViews() {
@@ -94,10 +124,25 @@ public class MainActivity extends Activity
     }
 
     protected void addItem() {
+        String category = "hoge";
+        String taxon = "hoge";
+        String japanese_name = "hoge";
+        String scientific_name = "hoge";
+        Cursor c = findData(num);
+        num++;
+        if(c.moveToFirst()) {
+            category = c.getString(c.getColumnIndex("category"));
+            taxon = c.getString(c.getColumnIndex("taxon"));
+            japanese_name = c.getString(c.getColumnIndex("japanese_name"));
+            scientific_name = c.getString(c.getColumnIndex("scientific_name"));
+        }
+
         dataList.add(
                 new RedData(
-                        "絶滅（EX）", "哺乳類",
-                        "オキナワオオコウモリ " + num++, "Pteropus loochoensis"
+//                        "絶滅（EX）", "哺乳類",
+                        category, taxon,
+                        //"オキナワオオコウモリ " + num++, "Pteropus loochoensis"
+                        japanese_name, scientific_name
                         ));
         adapter.notifyDataSetChanged();
     }
