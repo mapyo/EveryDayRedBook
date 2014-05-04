@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class MainActivity extends Activity
@@ -62,6 +64,7 @@ public class MainActivity extends Activity
         setAdapters();
     }
 
+    // 追加済みのDBを取得する
     private void setAddedDatabase() {
         AddedDataBaseHelper helper = new AddedDataBaseHelper(this);
         addedDb = helper.getWritableDatabase();
@@ -79,11 +82,99 @@ public class MainActivity extends Activity
         }
     }
 
-    private static final String [] COLUMNS = {"_id", "category", "taxon", "japanese_name", "scientific_name"};
+    private static final String [] RED_DATA_COLUMNS = {"_id", "category", "taxon", "japanese_name", "scientific_name"};
 
-    private Cursor findData(int id) {
-        Cursor cursor = db.query("red_data", COLUMNS, "_id=" + id, null, null, null, null);
-        return cursor;
+    /*
+     redbookテーブルから、値を取り出す
+     */
+    private RedData getAddRedData() {
+        RedData redData = null;
+
+        // 追加済みのDBから追加済みのIDを抽出
+        List addedIdList = findAddedIds();
+
+        //String sql = makeSelectSql(addedIdList);
+
+        String whereSql = makeWhereSql(addedIdList);
+
+        // 追加済のIDを除いてselectする
+        Cursor c = db.query("red_data", RED_DATA_COLUMNS, whereSql, null, null, null, "RANDOM()", "1");
+        //Cursor cursor = db.rawQuery(sql, null);
+
+        if(c.moveToFirst()) {
+            // 追加済リストに追加
+            insertAddedData(c.getInt(c.getColumnIndex("_id")));
+
+            redData = new RedData(
+                    c.getString(c.getColumnIndex("category")),
+                    c.getString(c.getColumnIndex("taxon")),
+                    c.getString(c.getColumnIndex("japanese_name")),
+                    c.getString(c.getColumnIndex("scientific_name"))
+            );
+        }
+
+        return redData;
+    }
+
+    // 追加済みのID一覧から、sqlを作成する
+    private String makeSelectSql(List addedIdList) {
+        String sql = "";
+
+        sql = "select _id from red_data where _id not in(";
+
+        for(int i=0; i < addedIdList.size(); i++) {
+           if(i==0) {
+               sql = sql + "'" + addedIdList.get(i) + "'";
+           } else {
+               sql = sql + ", '" + addedIdList.get(i) + "'";
+           }
+        }
+
+        // カンマ区切りで連結する
+        sql = sql + ") order by RANDOM() LIMIT 1";
+
+        return sql;
+    }
+
+    private String makeWhereSql(List addedIdList) {
+        String whereSql = "";
+
+        whereSql = "_id not in(";
+
+        for(int i=0; i < addedIdList.size(); i++) {
+            if(i==0) {
+                whereSql = whereSql + "'" + addedIdList.get(i) + "'";
+            } else {
+                whereSql = whereSql + ", '" + addedIdList.get(i) + "'";
+            }
+        }
+
+        // カンマ区切りで連結する
+        whereSql = whereSql + ")";
+
+        return whereSql;
+    }
+
+    // 追加済みのID達を取得する
+    private List findAddedIds() {
+        List<String> addedIdList = new ArrayList<String>();
+
+
+        String [] addedReddataColumns = {"added_id"};
+        Cursor c = addedDb.query(
+                "added_redbook",
+                addedReddataColumns,
+                null, null, null, null, null);
+
+        c.moveToFirst();
+        for (int i = 1; i <= c.getCount(); i++) {
+            // added_idを取り出す
+            addedIdList.add(c.getString(c.getColumnIndex("added_id")));
+
+            c.moveToNext();
+        }
+
+        return addedIdList;
     }
 
     protected void findViews() {
@@ -138,9 +229,13 @@ public class MainActivity extends Activity
         listView.setAdapter(adapter);
     }
 
+    // これが１日１回実行されるようになる
     protected void addItem() {
         // 追加用のデータ取得
-        mRedData = getRedData();
+        mRedData = getAddRedData();
+        if(mRedData == null) {
+            Toast.makeText(this, "追加できるデータがありませんでした", Toast.LENGTH_SHORT).show();
+        }
 
         // データリストに追加
         dataList.add(mRedData);
@@ -150,29 +245,29 @@ public class MainActivity extends Activity
     /*
      redbookテーブルから、値を取り出す
      */
-    private RedData getRedData() {
-        mRedData = null;
-
-        // 1〜500までのランダムな数
-        num = (int)(Math.random() * 500) + 1;
-
-        Cursor c = findData(num);
-        insertAddedData(num);
-
-        if(c.moveToFirst()) {
-            mRedData = new RedData(
-                    c.getString(c.getColumnIndex("category")),
-                    c.getString(c.getColumnIndex("taxon")),
-                    c.getString(c.getColumnIndex("japanese_name")),
-                    c.getString(c.getColumnIndex("scientific_name"))
-            );
-
-        } else {
-            Toast.makeText(this, "表示できるデータがありませんでした", Toast.LENGTH_SHORT).show();
-        }
-
-        return mRedData;
-    }
+//    private RedData getAddRedData() {
+//        RedData redData;
+//
+//        redData = getRedData();
+//
+//        return redData;
+//
+//        if(c.moveToFirst()) {
+//            /*
+//            mRedData = new RedData(
+//                    c.getString(c.getColumnIndex("category")),
+//                    c.getString(c.getColumnIndex("taxon")),
+//                    c.getString(c.getColumnIndex("japanese_name")),
+//                    c.getString(c.getColumnIndex("scientific_name"))
+//            );
+//            */
+//            mRedData = redData;
+//
+//        } else {
+//            Toast.makeText(this, "表示できるデータがありませんでした", Toast.LENGTH_SHORT).show();
+//        }
+//
+//    }
 
     private void insertAddedData(int addedId) {
         ContentValues values = new ContentValues();
