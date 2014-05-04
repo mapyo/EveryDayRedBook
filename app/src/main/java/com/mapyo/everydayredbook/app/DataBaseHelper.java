@@ -16,14 +16,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static String DB_NAME = "redbook";
     private static String DB_NAME_ASSET = "redbook.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DB_VERSION = 1;
 
     private SQLiteDatabase mDatabase;
     private final Context mContext;
     private final File mDatabasePath;
 
     public DataBaseHelper(Context context) {
-        super(context, DB_NAME, null, DATABASE_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
         mContext = context;
         mDatabasePath = mContext.getDatabasePath(DB_NAME);
     }
@@ -53,7 +53,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 }
 
                 if (checkDb != null) {
-                    checkDb.setVersion(DATABASE_VERSION);
+                    checkDb.setVersion(DB_VERSION);
                     checkDb.close();
                 }
             } catch (IOException e) {
@@ -82,7 +82,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
 
         int oldVersion = checkDb.getVersion();
-        int newVersion = DATABASE_VERSION;
+        int newVersion = DB_VERSION;
 
         if (oldVersion == newVersion) {
             // データベースは存在していて最新
