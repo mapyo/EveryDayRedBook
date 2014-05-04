@@ -153,10 +153,12 @@ public class MainActivity extends Activity
     private RedData getRedData() {
         mRedData = null;
 
+        // 1〜500までのランダムな数
+        num = (int)(Math.random() * 500) + 1;
+
         Cursor c = findData(num);
         insertAddedData(num);
 
-        num++;
         if(c.moveToFirst()) {
             mRedData = new RedData(
                     c.getString(c.getColumnIndex("category")),
