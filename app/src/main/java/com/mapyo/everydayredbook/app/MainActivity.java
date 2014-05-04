@@ -1,6 +1,7 @@
 package com.mapyo.everydayredbook.app;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -41,16 +42,29 @@ public class MainActivity extends Activity
     private DataBaseHelper mDbHelper;
     private SQLiteDatabase db;
 
+    // 追加した情報をもつDB
+    private SQLiteDatabase addedDb;
+
+    // 追加用のクラス作成
+    private RedData mRedData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // DB関連の初期設定
         setDatabase();
+        setAddedDatabase();
 
         setContentView(R.layout.activity_main);
         findViews();
         setListeners();
         setAdapters();
+    }
+
+    private void setAddedDatabase() {
+        AddedDataBaseHelper helper = new AddedDataBaseHelper(this);
+        addedDb = helper.getWritableDatabase();
     }
 
     private void setDatabase() {
@@ -125,23 +139,43 @@ public class MainActivity extends Activity
     }
 
     protected void addItem() {
+        // 追加用のデータ取得
+        mRedData = getRedData();
+
+        // データリストに追加
+        dataList.add(mRedData);
+        adapter.notifyDataSetChanged();
+    }
+
+    /*
+     redbookテーブルから、値を取り出す
+     */
+    private RedData getRedData() {
+        mRedData = null;
+
         Cursor c = findData(num);
+        insertAddedData(num);
+
         num++;
         if(c.moveToFirst()) {
-            String category = c.getString(c.getColumnIndex("category"));
-            String taxon = c.getString(c.getColumnIndex("taxon"));
-            String japanese_name = c.getString(c.getColumnIndex("japanese_name"));
-            String scientific_name = c.getString(c.getColumnIndex("scientific_name"));
+            mRedData = new RedData(
+                    c.getString(c.getColumnIndex("category")),
+                    c.getString(c.getColumnIndex("taxon")),
+                    c.getString(c.getColumnIndex("japanese_name")),
+                    c.getString(c.getColumnIndex("scientific_name"))
+            );
 
-            dataList.add(
-                    new RedData(
-                            category, taxon,
-                            japanese_name, scientific_name
-                    ));
-            adapter.notifyDataSetChanged();
         } else {
             Toast.makeText(this, "表示できるデータがありませんでした", Toast.LENGTH_SHORT).show();
         }
+
+        return mRedData;
+    }
+
+    private void insertAddedData(int addedId) {
+        ContentValues values = new ContentValues();
+        values.put("added_id", addedId);
+        addedDb.insert("added_redbook", null, values);
     }
 
     @Override
