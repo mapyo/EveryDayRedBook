@@ -65,10 +65,10 @@ public class MainActivity extends Activity
         }
     }
 
-    private static final String [] COLUMNS = {"id", "category", "taxon", "japanese_name", "scientific_name"};
+    private static final String [] COLUMNS = {"_id", "category", "taxon", "japanese_name", "scientific_name"};
 
     private Cursor findData(int id) {
-        Cursor cursor = db.query("red_data", COLUMNS, "id=" + id, null, null, null, null);
+        Cursor cursor = db.query("red_data", COLUMNS, "_id=" + id, null, null, null, null);
         return cursor;
     }
 
