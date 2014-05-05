@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +35,6 @@ public class MainActivity extends Activity
 
     ListView listView;
     Button addButton;
-    int num=1;
 
     static RedDataRowAdapter adapter;
 
@@ -93,13 +91,10 @@ public class MainActivity extends Activity
         // 追加済みのDBから追加済みのIDを抽出
         List addedIdList = findAddedIds();
 
-        //String sql = makeSelectSql(addedIdList);
-
         String whereSql = makeWhereSql(addedIdList);
 
         // 追加済のIDを除いてselectする
         Cursor c = db.query("red_data", RED_DATA_COLUMNS, whereSql, null, null, null, "RANDOM()", "1");
-        //Cursor cursor = db.rawQuery(sql, null);
 
         if(c.moveToFirst()) {
             // 追加済リストに追加
@@ -116,30 +111,9 @@ public class MainActivity extends Activity
         return redData;
     }
 
-    // 追加済みのID一覧から、sqlを作成する
-    private String makeSelectSql(List addedIdList) {
-        String sql = "";
-
-        sql = "select _id from red_data where _id not in(";
-
-        for(int i=0; i < addedIdList.size(); i++) {
-           if(i==0) {
-               sql = sql + "'" + addedIdList.get(i) + "'";
-           } else {
-               sql = sql + ", '" + addedIdList.get(i) + "'";
-           }
-        }
-
-        // カンマ区切りで連結する
-        sql = sql + ") order by RANDOM() LIMIT 1";
-
-        return sql;
-    }
 
     private String makeWhereSql(List addedIdList) {
-        String whereSql = "";
-
-        whereSql = "_id not in(";
+        String whereSql = "_id not in(";
 
         for(int i=0; i < addedIdList.size(); i++) {
             if(i==0) {
@@ -241,33 +215,6 @@ public class MainActivity extends Activity
         dataList.add(mRedData);
         adapter.notifyDataSetChanged();
     }
-
-    /*
-     redbookテーブルから、値を取り出す
-     */
-//    private RedData getAddRedData() {
-//        RedData redData;
-//
-//        redData = getRedData();
-//
-//        return redData;
-//
-//        if(c.moveToFirst()) {
-//            /*
-//            mRedData = new RedData(
-//                    c.getString(c.getColumnIndex("category")),
-//                    c.getString(c.getColumnIndex("taxon")),
-//                    c.getString(c.getColumnIndex("japanese_name")),
-//                    c.getString(c.getColumnIndex("scientific_name"))
-//            );
-//            */
-//            mRedData = redData;
-//
-//        } else {
-//            Toast.makeText(this, "表示できるデータがありませんでした", Toast.LENGTH_SHORT).show();
-//        }
-//
-//    }
 
     private void insertAddedData(int addedId) {
         ContentValues values = new ContentValues();
