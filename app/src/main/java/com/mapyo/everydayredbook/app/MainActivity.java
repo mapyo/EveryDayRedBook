@@ -138,7 +138,7 @@ public class MainActivity extends Activity
         Cursor c = addedDb.query(
                 "added_redbook",
                 addedReddataColumns,
-                null, null, null, null, null);
+                null, null, null, null, "_id desc");
 
         c.moveToFirst();
         for (int i = 1; i <= c.getCount(); i++) {
