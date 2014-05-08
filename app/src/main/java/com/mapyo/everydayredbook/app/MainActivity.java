@@ -79,18 +79,11 @@ public class MainActivity extends Activity
         // RedDataのarray List的なものを宣言
         ArrayList<RedData> addedRedDataList = new ArrayList<RedData>();
 
-        // red_data のdbに接続
-        //for (int i=0; i<10; i++) {
-            // addedIdListから１つ取ってくる
-
-            // 指定したIDをに対するデータを取ってくる
-
-            // addedRedDataListに値を入れる
-        //}
         int i = 0;
         for( String addedId : addedIdList) {
             // 一先ず、１０回分だけ表示させる。or 10個に満たない場合は、途中で終わるだけ
-            if (i>10) break;
+            // 一旦１０回という条件を外してみる。
+            //if (i>10) break;
             int id = Integer.parseInt(addedId);
             RedData reddata = getRedDataById(id);
             // リストの先頭に要素を追加
