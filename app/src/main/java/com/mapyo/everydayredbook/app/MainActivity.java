@@ -48,6 +48,9 @@ public class MainActivity extends Activity
     // 追加用のクラス作成
     private RedData mRedData;
 
+    // red_dataのカラム一覧
+    private static final String [] RED_DATA_COLUMNS = {"_id", "category", "taxon", "japanese_name", "scientific_name"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,56 @@ public class MainActivity extends Activity
         findViews();
         setListeners();
         setAdapters();
+
+        // 既に追加済みのデータをセットする
+        loadAddedRedbook();
+    }
+
+    private void loadAddedRedbook() {
+        // 追加済みのIDを取得
+        // 最近追加したものから順番に入るように
+        ArrayList<String> addedIdList = findAddedIds();
+
+        // 追加済みのデータを10件分リストから取得
+        // とりあえず、１件ずつ取得して配列に入れる感じにするかー
+
+        // RedDataのarray List的なものを宣言
+        ArrayList<RedData> addedRedDataList = new ArrayList<RedData>();
+
+        int i = 0;
+        for( String addedId : addedIdList) {
+            // 一先ず、１０回分だけ表示させる。or 10個に満たない場合は、途中で終わるだけ
+            // 一旦１０回という条件を外してみる。
+            //if (i>10) break;
+            int id = Integer.parseInt(addedId);
+            RedData reddata = getRedDataById(id);
+            // リストに要素を追加
+            addedRedDataList.add(reddata);
+
+            i++;
+        }
+
+        // viewに値をセットする
+        dataList = addedRedDataList;
+        adapter.notifyDataSetChanged();
+    }
+
+    // idに対応したred_dataを取得する
+    private RedData getRedDataById(int id) {
+        RedData redData=null;
+
+        Cursor c = db.query("red_data", RED_DATA_COLUMNS, "_id=" + id, null, null, null, null, null);
+
+        if(c.moveToFirst()) {
+            redData = new RedData(
+                    c.getString(c.getColumnIndex("category")),
+                    c.getString(c.getColumnIndex("taxon")),
+                    c.getString(c.getColumnIndex("japanese_name")),
+                    c.getString(c.getColumnIndex("scientific_name"))
+            );
+        }
+
+        return redData;
     }
 
     // 追加済みのDBを取得する
@@ -80,7 +133,6 @@ public class MainActivity extends Activity
         }
     }
 
-    private static final String [] RED_DATA_COLUMNS = {"_id", "category", "taxon", "japanese_name", "scientific_name"};
 
     /*
      redbookテーブルから、値を取り出す
@@ -93,7 +145,7 @@ public class MainActivity extends Activity
 
         String whereSql = makeWhereSql(addedIdList);
 
-        // 追加済のIDを除いてselectする
+        // 追加済のIDを除いてランダムに１つselectする
         Cursor c = db.query("red_data", RED_DATA_COLUMNS, whereSql, null, null, null, "RANDOM()", "1");
 
         if(c.moveToFirst()) {
@@ -130,15 +182,15 @@ public class MainActivity extends Activity
     }
 
     // 追加済みのID達を取得する
-    private List findAddedIds() {
-        List<String> addedIdList = new ArrayList<String>();
+    private ArrayList<String> findAddedIds() {
+        ArrayList<String> addedIdList = new ArrayList();
 
 
         String [] addedReddataColumns = {"added_id"};
         Cursor c = addedDb.query(
                 "added_redbook",
                 addedReddataColumns,
-                null, null, null, null, null);
+                null, null, null, null, "_id desc");
 
         c.moveToFirst();
         for (int i = 1; i <= c.getCount(); i++) {
@@ -212,7 +264,7 @@ public class MainActivity extends Activity
         }
 
         // データリストに追加
-        dataList.add(mRedData);
+        dataList.add(0, mRedData);
         adapter.notifyDataSetChanged();
     }
 
