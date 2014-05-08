@@ -86,8 +86,8 @@ public class MainActivity extends Activity
             //if (i>10) break;
             int id = Integer.parseInt(addedId);
             RedData reddata = getRedDataById(id);
-            // リストの先頭に要素を追加
-            addedRedDataList.add(0, reddata);
+            // リストに要素を追加
+            addedRedDataList.add(reddata);
 
             i++;
         }
