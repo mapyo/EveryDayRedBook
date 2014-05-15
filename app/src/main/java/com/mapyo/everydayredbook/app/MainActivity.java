@@ -1,13 +1,20 @@
 package com.mapyo.everydayredbook.app;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -246,6 +253,7 @@ public class MainActivity extends Activity
         switch (v.getId()){
             case R.id.button:
                 addItem();
+                sendNotification();
                 break;
         }
     }
@@ -348,5 +356,49 @@ public class MainActivity extends Activity
             return v;
         }
 
+    }
+
+
+    private void sendNotification() {
+        // Intentの作成
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+
+        // ここ、第２引数になんで０なのかがよくわかってない。
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // LargIcon の Bitmap を作成
+        // todo 画像変えたいと思うので、いずれここを修正する
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+
+        // NotificatonBilderを作成
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                getApplicationContext() );
+        builder.setContentIntent(contentIntent);
+        // ステータスバーに表示されるテキスト
+        builder.setTicker("Ticker");
+        // アイコン
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        // Notificationを開いた時に表示されるタイトル
+        builder.setContentTitle("ContentTitle");
+        // Notificationを開いた時に表示されるサブタイトル
+        builder.setContentText("ContentText");
+        // Notificationを開いた時に表示されるアイコン
+        builder.setLargeIcon(largeIcon);
+        // 通知するタイミング
+        builder.setWhen(System.currentTimeMillis());
+        // 通知時の音・バイブ・ライト → 何も震わせないのでやらない
+//        builder.setDefaults(Notification.DEFAULT_SOUND
+//                | Notification.DEFAULT_VIBRATE
+//                | Notification.DEFAULT_LIGHTS);
+        // タップするとキャンセル（消える）
+        builder.setAutoCancel(true);
+
+        // NotificationManagerを取得
+        NotificationManager manager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+
+        // Notificationを作成して通知
+        //manager.notify(NOTIFICATION_CLICK, builder.build());
+        manager.notify(0, builder.build());
     }
 }
