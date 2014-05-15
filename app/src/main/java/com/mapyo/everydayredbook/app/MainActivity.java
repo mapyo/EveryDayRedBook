@@ -376,13 +376,13 @@ public class MainActivity extends Activity
                 getApplicationContext() );
         builder.setContentIntent(contentIntent);
         // ステータスバーに表示されるテキスト
-        builder.setTicker("Ticker");
+        builder.setTicker("新しい絶滅危惧種が追加されたよ！！");
         // アイコン
         builder.setSmallIcon(R.drawable.ic_launcher);
         // Notificationを開いた時に表示されるタイトル
-        builder.setContentTitle("ContentTitle");
+        builder.setContentTitle("毎日の絶滅危惧種");
         // Notificationを開いた時に表示されるサブタイトル
-        builder.setContentText("ContentText");
+        builder.setContentText("今日はどんな絶滅危惧種だろうね？");
         // Notificationを開いた時に表示されるアイコン
         builder.setLargeIcon(largeIcon);
         // 通知するタイミング
