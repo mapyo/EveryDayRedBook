@@ -1,6 +1,7 @@
 package com.mapyo.everydayredbook.app;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -72,6 +74,9 @@ public class MainActivity extends Activity
 
         // 既に追加済みのデータをセットする
         loadAddedRedbook();
+
+        // 定期的に絶滅危惧種を追加してくれるサービスを追加する
+        setAlarmManager();
     }
 
     private void loadAddedRedbook() {
@@ -399,5 +404,24 @@ public class MainActivity extends Activity
         // Notificationを作成して通知
         //manager.notify(NOTIFICATION_CLICK, builder.build());
         manager.notify(0, builder.build());
+    }
+
+    private void setAlarmManager() {
+        // ReceivedActivityを呼び出すインテントを作成
+        Intent i = new Intent(getApplicationContext(), ReceivedActivity.class);
+        // ブロードキャストを投げるPendingIntentの作成
+        PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, i, 0);
+
+        // Calendar取得
+        Calendar calendar = Calendar.getInstance();
+        // 現在時刻を取得
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        // 現在寄り3秒後を設定
+        calendar.add(Calendar.SECOND, 3);
+
+        // AlramManager取得
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        // AlramManagerにPendingIntentを登録
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
     }
 }
