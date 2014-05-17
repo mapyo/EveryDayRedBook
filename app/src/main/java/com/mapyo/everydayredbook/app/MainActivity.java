@@ -90,7 +90,6 @@ public class MainActivity extends Activity
         // RedDataのarray List的なものを宣言
         ArrayList<RedData> addedRedDataList = new ArrayList<RedData>();
 
-        int i = 0;
         for( String addedId : addedIdList) {
             // 一先ず、１０回分だけ表示させる。or 10個に満たない場合は、途中で終わるだけ
             // 一旦１０回という条件を外してみる。
@@ -99,8 +98,6 @@ public class MainActivity extends Activity
             RedData reddata = getRedDataById(id);
             // リストに要素を追加
             addedRedDataList.add(reddata);
-
-            i++;
         }
 
         // viewに値をセットする
