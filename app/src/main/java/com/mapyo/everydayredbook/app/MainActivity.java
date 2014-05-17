@@ -91,9 +91,6 @@ public class MainActivity extends Activity
         ArrayList<RedData> addedRedDataList = new ArrayList<RedData>();
 
         for( String addedId : addedIdList) {
-            // 一先ず、１０回分だけ表示させる。or 10個に満たない場合は、途中で終わるだけ
-            // 一旦１０回という条件を外してみる。
-            //if (i>10) break;
             int id = Integer.parseInt(addedId);
             RedData reddata = getRedDataById(id);
             // リストに要素を追加
