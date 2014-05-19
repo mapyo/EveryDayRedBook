@@ -6,12 +6,16 @@ public class RedData {
     private String japaneseName;
     private String scientificName;
 
-    public RedData(
+    public RedData( ) {
+    }
+
+    public void setRedData(
             String category,
             String taxon,
             String japaneseName,
             String scientific_name
     ) {
+        // todo:いずれ必要そうだったら、各自のsetterを作る
         this.category = category;
         this.taxon = taxon;
         this.japaneseName = japaneseName;

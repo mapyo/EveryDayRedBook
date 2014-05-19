@@ -59,6 +59,7 @@ public class ReceivedActivity extends BroadcastReceiver {
 
         // Notificationを作成して通知
         //manager.notify(NOTIFICATION_CLICK, builder.build());
+        // todo:notifyの後の0はたぶん定数化しないといけないよ。
         manager.notify(0, builder.build());
     }
 }

@@ -42,8 +42,7 @@ public class RedDataActivity extends Activity {
         String japaneseName = intent.getStringExtra("JAPANESE_NAME");
         String scientificName = intent.getStringExtra("SCIENTIFIC_NAME");
 
-        redData = new RedData(
-                category, taxon, japaneseName, scientificName);
+        redData.setRedData( category, taxon, japaneseName, scientificName);
     }
 
 

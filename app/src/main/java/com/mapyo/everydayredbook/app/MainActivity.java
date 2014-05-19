@@ -76,7 +76,9 @@ public class MainActivity extends Activity
         loadAddedRedbook();
 
         // 定期的に絶滅危惧種を追加してくれるサービスを追加する
-        setAlarmManager();
+        // 以下、役目を終えたので一旦コメントアウトする
+        // たぶん、ボタンを押すと３秒後にnotification＆リスト追加のイメージ
+        //setAlarmManager();
 
         // 毎日12:00にpush通知をセットする
         DailyScheduler scheduler = new DailyScheduler(getApplicationContext());
@@ -113,7 +115,8 @@ public class MainActivity extends Activity
         Cursor c = db.query("red_data", RED_DATA_COLUMNS, "_id=" + id, null, null, null, null, null);
 
         if(c.moveToFirst()) {
-            redData = new RedData(
+            redData = new RedData();
+            redData.setRedData(
                     c.getString(c.getColumnIndex("category")),
                     c.getString(c.getColumnIndex("taxon")),
                     c.getString(c.getColumnIndex("japanese_name")),
@@ -161,7 +164,8 @@ public class MainActivity extends Activity
             // 追加済リストに追加
             insertAddedData(c.getInt(c.getColumnIndex("_id")));
 
-            redData = new RedData(
+            redData = new RedData();
+            redData.setRedData(
                     c.getString(c.getColumnIndex("category")),
                     c.getString(c.getColumnIndex("taxon")),
                     c.getString(c.getColumnIndex("japanese_name")),
@@ -267,6 +271,19 @@ public class MainActivity extends Activity
 
     // これが１日１回実行されるようになる
     protected void addItem() {
+//        // 追加のイメージ
+//        RedData addedRedData = new RedData();
+        // 追加用のデータをセット
+//        addedRedData.setAddedRedData();
+//        if(addedRedData.getStatus() == hoge) {
+//            Toast.makeText(this, "追加できるデータがありませんでした", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        // データリストに追加
+//        dataList.add(0, mRedData);
+//        adapter.notifyDataSetChanged();
+
+
         // 追加用のデータ取得
         mRedData = getAddRedData();
         if(mRedData == null) {
