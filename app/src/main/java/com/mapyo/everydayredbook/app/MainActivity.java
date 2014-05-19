@@ -77,6 +77,10 @@ public class MainActivity extends Activity
 
         // 定期的に絶滅危惧種を追加してくれるサービスを追加する
         setAlarmManager();
+
+        // 毎日12:00にpush通知をセットする
+        DailyScheduler scheduler = new DailyScheduler(getApplicationContext());
+        scheduler.setByTime(ReceivedActivity.class, 12, 00, -1);
     }
 
     private void loadAddedRedbook() {

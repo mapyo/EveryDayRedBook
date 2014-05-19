@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -14,6 +15,7 @@ public class DailyScheduler {
 
     public DailyScheduler(Context c) {
         mContext = c;
+        Log.i("DailyScheduler", "start");
     }
 
     /**
@@ -24,9 +26,12 @@ public class DailyScheduler {
     public <T> void set(Class<T> launch_service, long duration_time, int service_id) {
         Intent intent = new Intent(mContext, launch_service);
 
-        PendingIntent action = PendingIntent.getService(mContext, service_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        //PendingIntent sender = PendingIntent.getService(mContext, service_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        //PendingIntent sender = PendingIntent.getService(mContext, service_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        //PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, i, 0);
+        PendingIntent sender = PendingIntent.getBroadcast(mContext, service_id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarm = (AlarmManager) mContext.getSystemService(mContext.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC, duration_time, AlarmManager.INTERVAL_DAY, action);
+        alarm.setRepeating(AlarmManager.RTC, duration_time, AlarmManager.INTERVAL_DAY, sender);
     }
 
 
@@ -36,6 +41,7 @@ public class DailyScheduler {
      */
     public <T> void setByTime(Class<T> launch_service, int hour, int minuite, int service_id) {
         // 日本(+9)以外のタイムゾーンを使う時はここを修正する
+        // todo:日本以外の場合にここをいい感じにしてお昼にあれするようにする。
         TimeZone tz = TimeZone.getTimeZone("Asia/Tokyo");
 
         // 今日の目標時刻のカレンダーインスタンス作成

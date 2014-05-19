@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -18,6 +19,8 @@ public class ReceivedActivity extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent)
     {
+        Log.i("ReceivedActivity", "start");
+
         mContext = context;
         mIntent = intent;
         Toast.makeText(context, "called ReceivedActivity", Toast.LENGTH_SHORT).show();
