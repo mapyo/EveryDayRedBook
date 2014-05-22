@@ -109,25 +109,6 @@ public class MainActivity extends Activity
         adapter.notifyDataSetChanged();
     }
 
-    // idに対応したred_dataを取得する
-    private RedData getRedDataById(int id) {
-        RedData redData=null;
-
-        Cursor c = db.query("red_data", RED_DATA_COLUMNS, "_id=" + id, null, null, null, null, null);
-
-        if(c.moveToFirst()) {
-            redData = new RedData(this);
-            redData.setRedData(
-                    c.getString(c.getColumnIndex("category")),
-                    c.getString(c.getColumnIndex("taxon")),
-                    c.getString(c.getColumnIndex("japanese_name")),
-                    c.getString(c.getColumnIndex("scientific_name"))
-            );
-        }
-
-        return redData;
-    }
-
     // 追加済みのDBを取得する
     private void setAddedDatabase() {
         AddedDataBaseHelper helper = new AddedDataBaseHelper(this);
@@ -212,12 +193,6 @@ public class MainActivity extends Activity
         // データリストに追加
         dataList.add(0, addedRedData);
         adapter.notifyDataSetChanged();
-    }
-
-    private void insertAddedData(int addedId) {
-        ContentValues values = new ContentValues();
-        values.put("added_id", addedId);
-        addedDb.insert("added_redbook", null, values);
     }
 
     @Override
