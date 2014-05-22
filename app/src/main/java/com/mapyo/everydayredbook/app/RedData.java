@@ -57,11 +57,6 @@ public class RedData {
 
         String whereSql = makeWhereSql(addedIdList);
 
-
-        // todo:log
-        Log.i("RedData", "test");
-
-
         // 追加済のIDを除いてランダムに１つselectする
         setRedDataBaseReadable();
         Cursor c = mRedDbReadable.query("red_data", RED_DATA_COLUMNS, whereSql, null, null, null, "RANDOM()", "1");
@@ -149,10 +144,8 @@ public class RedData {
 
     private SQLiteDatabase setRedDataBaseReadable() {
         if (mRedDbReadable == null) {
-            Log.i("RedData", "if");
             mRedDbReadable = getRedDataBaseHelper().getReadableDatabase();
         }
-        Log.i("RedData", "out");
 
         return mAddedDbReadable;
     }
