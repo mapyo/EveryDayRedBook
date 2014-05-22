@@ -55,9 +55,6 @@ public class MainActivity extends Activity
     // 追加した情報をもつDB
     private SQLiteDatabase addedDb;
 
-    // 追加用のクラス作成
-    private RedData mRedData;
-
     // red_dataのカラム一覧
     private static final String [] RED_DATA_COLUMNS = {"_id", "category", "taxon", "japanese_name", "scientific_name"};
 
