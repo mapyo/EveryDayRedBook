@@ -87,7 +87,8 @@ public class MainActivity extends Activity
     private void loadAddedRedbook() {
         // 追加済みのIDを取得
         // 最近追加したものから順番に入るように
-        ArrayList<String> addedIdList = findAddedIds();
+        RedData findReddata = new RedData(this);
+        ArrayList<String> addedIdList = findReddata.findAddedIds();
 
         // 追加済みのデータを10件分リストから取得
         // とりあえず、１件ずつ取得して配列に入れる感じにするかー
@@ -145,36 +146,6 @@ public class MainActivity extends Activity
     }
 
 
-    /*
-     redbookテーブルから、値を取り出す
-     */
-    private RedData getAddRedData() {
-        RedData redData = null;
-
-        // 追加済みのDBから追加済みのIDを抽出
-        List addedIdList = findAddedIds();
-
-        String whereSql = makeWhereSql(addedIdList);
-
-        // 追加済のIDを除いてランダムに１つselectする
-        Cursor c = db.query("red_data", RED_DATA_COLUMNS, whereSql, null, null, null, "RANDOM()", "1");
-
-        if(c.moveToFirst()) {
-            // 追加済リストに追加
-            insertAddedData(c.getInt(c.getColumnIndex("_id")));
-
-            redData = new RedData(this);
-            redData.setRedData(
-                    c.getString(c.getColumnIndex("category")),
-                    c.getString(c.getColumnIndex("taxon")),
-                    c.getString(c.getColumnIndex("japanese_name")),
-                    c.getString(c.getColumnIndex("scientific_name"))
-            );
-        }
-
-        return redData;
-    }
-
 
     private String makeWhereSql(List addedIdList) {
         String whereSql = "_id not in(";
@@ -193,27 +164,6 @@ public class MainActivity extends Activity
         return whereSql;
     }
 
-    // 追加済みのID達を取得する
-    private ArrayList<String> findAddedIds() {
-        ArrayList<String> addedIdList = new ArrayList();
-
-
-        String [] addedReddataColumns = {"added_id"};
-        Cursor c = addedDb.query(
-                "added_redbook",
-                addedReddataColumns,
-                null, null, null, null, "_id desc");
-
-        c.moveToFirst();
-        for (int i = 1; i <= c.getCount(); i++) {
-            // added_idを取り出す
-            addedIdList.add(c.getString(c.getColumnIndex("added_id")));
-
-            c.moveToNext();
-        }
-
-        return addedIdList;
-    }
 
     protected void findViews() {
        listView = (ListView)findViewById(R.id.list_view);

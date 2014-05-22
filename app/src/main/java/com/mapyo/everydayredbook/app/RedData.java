@@ -103,7 +103,7 @@ public class RedData {
         return whereSql;
     }
 
-    private ArrayList<String> findAddedIds() {
+    public ArrayList<String> findAddedIds() {
         ArrayList<String> addedIdList = new ArrayList();
 
         String [] addedReddataColumns = {"added_id"};
