@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ public class MainActivity extends Activity
     static RedDataRowAdapter adapter;
 
     // db関連
+    // 初期設定用のDB
     private DataBaseHelper mDbHelper;
     private SQLiteDatabase db;
 
@@ -115,7 +117,7 @@ public class MainActivity extends Activity
         Cursor c = db.query("red_data", RED_DATA_COLUMNS, "_id=" + id, null, null, null, null, null);
 
         if(c.moveToFirst()) {
-            redData = new RedData();
+            redData = new RedData(this);
             redData.setRedData(
                     c.getString(c.getColumnIndex("category")),
                     c.getString(c.getColumnIndex("taxon")),
@@ -164,7 +166,7 @@ public class MainActivity extends Activity
             // 追加済リストに追加
             insertAddedData(c.getInt(c.getColumnIndex("_id")));
 
-            redData = new RedData();
+            redData = new RedData(this);
             redData.setRedData(
                     c.getString(c.getColumnIndex("category")),
                     c.getString(c.getColumnIndex("taxon")),
@@ -271,27 +273,16 @@ public class MainActivity extends Activity
 
     // これが１日１回実行されるようになる
     protected void addItem() {
-//        // 追加のイメージ
-//        RedData addedRedData = new RedData();
+        // 追加のイメージ
+        RedData addedRedData = new RedData(this);
         // 追加用のデータをセット
-//        addedRedData.setAddedRedData();
-//        if(addedRedData.getStatus() == hoge) {
-//            Toast.makeText(this, "追加できるデータがありませんでした", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        // データリストに追加
-//        dataList.add(0, mRedData);
-//        adapter.notifyDataSetChanged();
-
-
-        // 追加用のデータ取得
-        mRedData = getAddRedData();
-        if(mRedData == null) {
+        addedRedData.setAddedRedData();
+        Log.i("addItem", "test");
+        if(addedRedData.getCategory() == null) {
             Toast.makeText(this, "追加できるデータがありませんでした", Toast.LENGTH_SHORT).show();
         }
-
         // データリストに追加
-        dataList.add(0, mRedData);
+        dataList.add(0, addedRedData);
         adapter.notifyDataSetChanged();
     }
 
