@@ -10,16 +10,17 @@ import android.widget.TextView;
 
 public class RedDataActivity extends Activity {
 
-    RedData redData;
+    private RedData redData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_red_data);
 
+        redData = new RedData(this);
+
         setRedDataRow();
         setLayout();
-
     }
 
     // 画面に変数をセット

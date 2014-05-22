@@ -98,7 +98,8 @@ public class MainActivity extends Activity
 
         for( String addedId : addedIdList) {
             int id = Integer.parseInt(addedId);
-            RedData reddata = getRedDataById(id);
+            RedData reddata = new RedData(this);
+            reddata.setRedDataById(id);
             // リストに要素を追加
             addedRedDataList.add(reddata);
         }
@@ -144,26 +145,6 @@ public class MainActivity extends Activity
             throw sqle;
         }
     }
-
-
-
-    private String makeWhereSql(List addedIdList) {
-        String whereSql = "_id not in(";
-
-        for(int i=0; i < addedIdList.size(); i++) {
-            if(i==0) {
-                whereSql = whereSql + "'" + addedIdList.get(i) + "'";
-            } else {
-                whereSql = whereSql + ", '" + addedIdList.get(i) + "'";
-            }
-        }
-
-        // カンマ区切りで連結する
-        whereSql = whereSql + ")";
-
-        return whereSql;
-    }
-
 
     protected void findViews() {
        listView = (ListView)findViewById(R.id.list_view);

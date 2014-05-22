@@ -123,6 +123,23 @@ public class RedData {
         return addedIdList;
     }
 
+    // idに対応したred_dataを取得する
+    public void setRedDataById(int id) {
+        RedData redData=null;
+
+        setRedDataBaseReadable();
+        Cursor c = mRedDbReadable.query("red_data", RED_DATA_COLUMNS, "_id=" + id, null, null, null, null, null);
+
+        if(c.moveToFirst()) {
+            setRedData(
+                    c.getString(c.getColumnIndex("category")),
+                    c.getString(c.getColumnIndex("taxon")),
+                    c.getString(c.getColumnIndex("japanese_name")),
+                    c.getString(c.getColumnIndex("scientific_name"))
+            );
+        }
+    }
+
     private DataBaseHelper getRedDataBaseHelper() {
         if(mRedDataBaseHelper == null) {
             mRedDataBaseHelper = new DataBaseHelper(mContext);
