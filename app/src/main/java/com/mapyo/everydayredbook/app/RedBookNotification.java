@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 
-public class Notification {
+public class RedBookNotification {
     private Context mContext;
     private Intent mIntent;
 
