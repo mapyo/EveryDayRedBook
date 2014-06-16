@@ -13,7 +13,7 @@ public class RedBookNotification {
     private Context mContext;
     private Intent mIntent;
 
-    public void Notification(Context context, Intent intent){
+    public RedBookNotification(Context context, Intent intent){
         mContext = context;
         mIntent = intent;
     }
