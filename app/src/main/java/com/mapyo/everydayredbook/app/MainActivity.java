@@ -276,43 +276,10 @@ public class MainActivity extends Activity
         // Intentの作成
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
 
-        // ここ、第２引数になんで０なのかがよくわかってない。
-        PendingIntent contentIntent = PendingIntent.getActivity(
-                MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        RedBookNotification notification =
+                new RedBookNotification(getApplicationContext(), intent);
 
-        // LargIcon の Bitmap を作成
-        // todo 画像変えたいと思うので、いずれここを修正する
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-
-        // NotificatonBilderを作成
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                getApplicationContext() );
-        builder.setContentIntent(contentIntent);
-        // ステータスバーに表示されるテキスト
-        builder.setTicker("新しい絶滅危惧種が追加されたよ！！");
-        // アイコン
-        builder.setSmallIcon(R.drawable.ic_launcher);
-        // Notificationを開いた時に表示されるタイトル
-        builder.setContentTitle("毎日の絶滅危惧種");
-        // Notificationを開いた時に表示されるサブタイトル
-        builder.setContentText("今日はどんな絶滅危惧種だろうね？");
-        // Notificationを開いた時に表示されるアイコン
-        builder.setLargeIcon(largeIcon);
-        // 通知するタイミング
-        builder.setWhen(System.currentTimeMillis());
-        // 通知時の音・バイブ・ライト → 何も震わせないのでやらない
-//        builder.setDefaults(Notification.DEFAULT_SOUND
-//                | Notification.DEFAULT_VIBRATE
-//                | Notification.DEFAULT_LIGHTS);
-        // タップするとキャンセル（消える）
-        builder.setAutoCancel(true);
-
-        // NotificationManagerを取得
-        NotificationManager manager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-
-        // Notificationを作成して通知
-        //manager.notify(NOTIFICATION_CLICK, builder.build());
-        manager.notify(0, builder.build());
+        notification.sendNotification();
     }
 
     private void setAlarmManager() {
