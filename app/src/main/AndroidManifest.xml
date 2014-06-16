@@ -20,6 +20,8 @@
             android:name="com.mapyo.everydayredbook.app.RedDataActivity"
             android:label="@string/title_activity_red_data" >
         </activity>
+
+        <receiver android:name=".ReceivedActivity" android:process=":remote" />
     </application>
 
 </manifest>
